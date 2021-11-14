@@ -1,0 +1,16 @@
+#maxlod score calculation
+i <- 0
+lod <- vector()
+# loop with multiple values for genetic distance
+for ( dist in seq(0, 0.5 , by=0.01)) {
+	i <- i + 1
+	total <- 11                         # number of tested individuals + obligate carriers
+	recombined <- 1                         # number carriers without disease
+	nonrecombined <- total - recombined                          # number of matching genotype-phenotype under 100% penetrance
+	p_linked <- ((dist/2)^recombined * ((1-dist)/2)^nonrecombined)                         # likelihood of linkage between loci (genotype - phenotype linkage?)
+	p_nonlinked <- 0.25^total                         # likelihood of no linkage
+	lod[i] <- log10(p_linked/p_nonlinked)                         # lod score
+	names(lod)[i] <- dist
+}
+max(lod, na.rm=TRUE)                          
+
